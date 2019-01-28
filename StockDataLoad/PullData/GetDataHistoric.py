@@ -27,7 +27,7 @@ def GetHistoricalPricing(stock_abbr, start_date, end_date, interval) :
     end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d')
     url = 'https://query1.finance.yahoo.com/v8/finance/chart/' + stock_abbr + '?period1=' + str(int(time.mktime(start_date.timetuple()))) + '&period2=' + str(int(time.mktime(end_date.timetuple()))) + '&interval=' + interval + '&events=history&crumb=pa16aIx60zo'
     response = requests.get(url).content
-#    print(url)
+    print(url)
     try:
         temp_json = json.loads(response)
         temp_close = temp_json['chart']['result'][0]['indicators']['quote'][0]['close']

@@ -29,7 +29,7 @@ Universe = Faber_Ticker #Universe can be modified in the UniverseData.universe f
 
 
 #Build DataBase
-HistoricalPricingInsert(Universe , '1h') #This can be 1D to get daily date. 
+HistoricalPricingInsert(Universe , '1d') #This can be 1D to get daily date. 
 #You do not have to run this everyday. This builds the historical data base for a year. This can be configured in 
 #PullData.HistoricDataPullDates with the GetYearWindow function.
 TodayPricingInsert(Universe) #This will insert the data in for the day.
