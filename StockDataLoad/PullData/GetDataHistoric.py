@@ -53,7 +53,7 @@ def HistoricalPricingInsert(Universe, time_interval):
 
 
         PricingData = GetHistoricalPricing(stock_abbr = ticker, start_date = str(start_date),  end_date =  str(last_date),   interval =time_interval )
-
+        print(PricingData)
         if PricingData != 'NO DATA' :
             for i in range(len(PricingData)):
 #                print(i)

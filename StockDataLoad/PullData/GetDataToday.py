@@ -42,7 +42,7 @@ def TodayPricingInsert(Universe):
                                     start_date = previous_date , 
                                     end_date = today_date , 
                                     interval = '1d')
-        print(PricingData)
+        #print(PricingData)
         if PricingData != 'NO DATA' :
             for i in range(len(PricingData)):
                 
