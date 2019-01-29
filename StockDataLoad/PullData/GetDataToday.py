@@ -63,7 +63,7 @@ def TodayPricingInsert(Universe):
         DB.commit()
         return('Data has been Pulled Today')
     except :
-        return('Maybe Trade a Box Spread Today; Data Failed')
+        return('Maybe Trade a Box Spread Today or Forex or Hopefully it is just the weekend ; But Data did fail ')
 
 
 

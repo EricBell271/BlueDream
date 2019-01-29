@@ -4,6 +4,9 @@ Created on Fri Jan 25 20:22:28 2019
 
 @author: Eric Bell
 """
+import matplotlib.pyplot as plt
+from DBQuery.BlueDream import GetPrice
+import pandas as pd
 
 ##Add your connection to connect the DB.
 from db_loadfiles.connect_DB import BlueDream
@@ -21,29 +24,24 @@ from UniverseData.universe import Faber_Ticker, SPY_Only_Universe
 from Analytics.trendy import  supres, gentrends, segtrends, minitrends, iterlines
 from Analytics.LocalMaxMin import get_max_min, find_patterns,plot_minmax_patterns
 
-
-
-
 #Universe = 
 Universe = Faber_Ticker #Universe can be modified in the UniverseData.universe file. 
 
 
 #Build DataBase
-HistoricalPricingInsert(Universe , '1d') #This can be 1D to get daily date. 
-#You do not have to run this everyday. This builds the historical data base for a year. This can be configured in 
-#PullData.HistoricDataPullDates with the GetYearWindow function.
-TodayPricingInsert(Universe) #This will insert the data in for the day.
+#data_status= HistoricalPricingInsert(Universe , '1d') #This can be 1D to get daily date. 
+#print(data_status)
+##You do not have to run this everyday. This builds the historical data base for a year. This can be configured in 
+##PullData.HistoricDataPullDates with the GetYearWindow function.
+#todays_data_status=TodayPricingInsert(Universe) #This will insert the data in for the day.
+#print(todays_data_status)
+def show():
+    return(plt.show(block=True))
 
 
-
-from DBQuery.BlueDream import GetPrice
-
-
-import pandas as pd
 
 smoothing = 10
-window =100
-import matplotlib.pyplot as plt
+window =25
 
 
 for stock in Universe :
@@ -51,14 +49,20 @@ for stock in Universe :
 #    print(historicData)
     df =pd.DataFrame(historicData, columns =['ticker', 'Date', 'Open','High',  'Low', 'close',  'volume', 'DateTime'])
     df.set_index(['ticker', 'DateTime' ])
-    df.drop('Date', axis=1, inplace=True)
+#    df.drop('Date', axis=1, inplace=True)
     df.head()
+    df['ema']=df.close.ewm(span=20,adjust=False).mean() ###Calculate the ema
     max_min =get_max_min(df, smoothing, window)#this function calculates the min and max of the stocks. 
     df.reset_index()['close'].plot()##Run these two functions together
-    plt.scatter(max_min.index, max_min.values, color = 'orange', alpha = 0.50)##to complete the plot
+    plt.scatter(max_min.index, max_min.values, color = 'orange', alpha = 0.50)##to complete the plotema=df.close.ewm(span=20,adjust=False).mean() ###Calculate the ema
+
+#    df.plot(x ='Date', y = 'ema')
 #    df.ema =df.close.ewm(com=0.5).mean()
 #    df.head()
-    ema=df.close.ewm(span=20,adjust=False).mean() ###Calculate the ema
-    patterns  =find_patterns(max_min) ###Find stock patterns. 
-    plot_minmax_patterns(df, max_min, patterns, stock, window, ema)
-
+    show()
+#
+#    ema=df.close.ewm(span=20,adjust=False).mean() ###Calculate the ema
+#    patterns  =find_patterns(max_min) ###Find stock patterns. 
+#    plot_minmax_patterns(df, max_min, patterns, stock, window, ema)
+#    show()
+#
