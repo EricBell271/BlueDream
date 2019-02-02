@@ -20,7 +20,7 @@ def GetPrice(Database, ticker):
     PricingData= cursor.fetchall()
     return(PricingData)
 
-#GetPrice(BlueDream, 'AGG')
+#GetPrice(BlueDream, 'SPY')
 
 def GetPriceSpecifyDate(Database, ticker, date):
     ticker ='AGG'

@@ -28,7 +28,7 @@ from PullData.GetDataHistoric import GetHistoricalPricing
 #Universe = GetTickerNames(BlueDream)
 #Universe = SPY_Only_Universe
 
-def TodayPricingInsert(Universe):
+def TodayPricingInsert(Universe, time_interval):
     
     
     HistoricPricingData =[]
@@ -41,8 +41,8 @@ def TodayPricingInsert(Universe):
         PricingData = GetHistoricalPricing(stock_abbr = ticker, 
                                     start_date = previous_date , 
                                     end_date = today_date , 
-                                    interval = '1d')
-        #print(PricingData)
+                                    interval = time_interval )
+#        print(PricingData)
         if PricingData != 'NO DATA' :
             for i in range(len(PricingData)):
                 
@@ -67,4 +67,39 @@ def TodayPricingInsert(Universe):
 
 
 
+def HourlyPricingInsert(Universe, time_interval):
+    
+    
+    HistoricPricingData =[]
+    for ticker in Universe:
 
+        print(ticker)
+#        today_date = dt.today().strftime('%Y-%m-%d')
+        today_date = (dt.today().now() + datetime.timedelta(days=1, hours=0)).strftime('%Y-%m-%d %H:%M')
+        previous_date = (dt.today().now()).strftime('%Y-%m-%d %H:%M')
+        PricingData = GetHistoricalPricing(stock_abbr = ticker, 
+                                    start_date = previous_date , 
+                                    end_date = today_date , 
+                                    interval = time_interval )
+#        print(PricingData)
+        if PricingData != 'NO DATA' :
+            for i in range(len(PricingData)):
+                
+                DateTime  = PricingData[i][0]
+                Date = DateTime[:10]
+                close    =PricingData[i][1]
+                volume    =PricingData[i][2]
+                high =  PricingData[i][3]
+                low  = PricingData[i][4]
+                Open= PricingData[i][5]
+                HistoricPricingData.append([ticker, Date, Open, close, high, low, volume , DateTime])
+                
+    DB = BlueDream
+    cursor = DB.cursor()
+
+    try:
+        cursor.executemany("INSERT INTO TickerDatePrice VALUES(%s,%s,%s,%s, %s, %s,%s, %s)", HistoricPricingData)    
+        DB.commit()
+        return('Data has been Pulled Today')
+    except :
+        return('Maybe Trade a Box Spread Today or Forex or Hopefully it is just the weekend ; But Data did fail ')

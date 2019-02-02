@@ -11,14 +11,14 @@ from datetime import datetime as dt, timedelta
 def GetTodaysDate():
     days_to_subtract = 0
     d = (dt.today() - timedelta(days=days_to_subtract))
-    last_date = d.strftime('%Y-%m-%d')
+    last_date = d.strftime('%Y-%m-%d 09:30')
     return(last_date)
 #GetTodaysDate()
     
 def GetYearWindow():
     window_length = 365
     d = (dt.today() - timedelta(days=window_length ))
-    window_begin = d.strftime('%Y-%m-%d')
+    window_begin = d.strftime('%Y-%m-%d 09:30')
     return(window_begin)
 #    
 #GetYearWindow()
