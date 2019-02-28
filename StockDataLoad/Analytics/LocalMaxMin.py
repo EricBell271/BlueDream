@@ -50,7 +50,6 @@ def find_patterns(max_min):
         
         # Pattern must play out in less than n units
         if window.index[-1] - window.index[0] > 100:      
-#            print(window.index)
             continue   
             
         a, b, c, d, e = window.iloc[0:5]
@@ -84,7 +83,7 @@ def plot_minmax_patterns(prices, max_min, patterns, stock, window, ema):
                               s=200, alpha=.3)
                 plt.yticks([])
         plt.tight_layout()
-        plt.title('{}:  EMA {}, Window {} ({} patterns)'.format(stock,  ema, window, num_pat))
+#        plt.title('{}: {}: EMA {}, Window {} ({} patterns)'.format(stock,  ema, window, num_pat))
 
 def get_results(prices, max_min, pat, stock, ema_, window_):
     

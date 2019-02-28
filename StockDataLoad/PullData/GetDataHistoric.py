@@ -22,15 +22,9 @@ from PullData.HistoricDataPullDates import GetTodaysDate,  GetYearWindow
 
 
 
-def GetHistoricalPricing(stock_abbr, start_date, end_date, interval) :
-    formats =['%Y-%m-%d %H:%M', '%Y-%m-%d']
-    for f in formats :    
-        try :
-            start_date = datetime.datetime.strptime(start_date, f)
-            end_date = datetime.datetime.strptime(end_date, f)
-            break
-        except ValueError as e:
-            pass
+def GetHistoricalPricing(stock_abbr, start_date, end_date, interval) : 
+    start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d')
+    end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d')
     url = 'https://query1.finance.yahoo.com/v8/finance/chart/' + stock_abbr + '?period1=' + str(int(time.mktime(start_date.timetuple()))) + '&period2=' + str(int(time.mktime(end_date.timetuple()))) + '&interval=' + interval + '&events=history&crumb=pa16aIx60zo'
     response = requests.get(url).content
 #    print(url)
@@ -48,18 +42,18 @@ def GetHistoricalPricing(stock_abbr, start_date, end_date, interval) :
         return('NO DATA')
 
 
-start_date = datetime.datetime.now()
+
 #
-#PricingData = GetHistoricalPricing(stock_abbr ='CGC', start_date = '2018-11-13 10:30',  end_date = '2018-11-14 10:30',   interval = '1h')
+#PricingData = GetHistoricalPricing(stock_abbr ='CGC', start_date = '2018-11-13',  end_date = '2018-11-14',   interval = '5m')
 def HistoricalPricingInsert(Universe, time_interval):
     last_date = GetTodaysDate()
     start_date   = GetYearWindow()
     HistoricPricingData =[]
     for ticker in Universe:
-        
+
 
         PricingData = GetHistoricalPricing(stock_abbr = ticker, start_date = str(start_date),  end_date =  str(last_date),   interval =time_interval )
-#        print(PricingData)
+
         if PricingData != 'NO DATA' :
             for i in range(len(PricingData)):
 #                print(i)
@@ -102,8 +96,8 @@ def HistoricalPricingInsert(Universe, time_interval):
     except :
         return('Buy an Index Fund ;Historical Data Failure')
 #
-from UniverseData.universe import Faber_Ticker, SPY_Only_Universe
+#from UniverseData.universe import Faber_Ticker, SPY_Only_Universe
 #
 #
 #
-HistoricalPricingInsert(SPY_Only_Universe, '1h')
+#HistoricalPricingInsert(SPY_Only_Universe)
