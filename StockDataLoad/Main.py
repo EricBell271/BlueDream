@@ -52,8 +52,8 @@ import matplotlib.pyplot as plt
 
 def GetLocalCriteria(Universe, charts = True) :
 
-    smoothing = 10
-    window =10
+    smoothing = 10*8
+    window =30*8
     for stock in Universe :
         historicData = GetPrice(BlueDream, stock)
         #    print(historicData)
@@ -73,7 +73,7 @@ def GetLocalCriteria(Universe, charts = True) :
     #    df.head()
             ##Calculate the ema
             patterns  =find_patterns(max_min) ###Find stock patterns. 
-            plot_minmax_patterns(df, max_min, patterns, stock, window, ema)
+            #plot_minmax_patterns(df, max_min, patterns, stock, window, ema)
             plt.show()
     return(max_min)
     
