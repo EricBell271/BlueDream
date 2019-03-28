@@ -6,14 +6,19 @@ Created on Sat Sep 29 22:20:37 2018
 """
 
 
-from get_tweets import get_tweets_hashtag, get_tweets_screenname
+from PullData.get_tweets import get_tweets_hashtag, get_tweets_screenname
 from db_loadfiles.connect_DB import BlueDream
-from GetDataHistoric import GetTickerNames
+#from PullData.GetDataHistoric import GetTickerNames
+from UniverseData.universe import Faber_Ticker, SPY_Only_Universe
+
+
 import time
 from textblob import TextBlob
 
 #import csv
 #from DataBaseQuery import  GetCompanyNames
+
+#universe = SPY_Only_Universe
 
 def get_tweet_sentiment(tweet):
     sentiment = TextBlob(tweet)
@@ -94,17 +99,17 @@ def AnalysisDBInsert(issue) :
 
 
 #
-def search_hashtags():
+def InsertHashtagData(universe):
 
-    hashtags = GetTickerNames(BlueDream)
+    hashtags = universe[:]
     len(hashtags)
 #    hashtags = GetCompanyNames(BlueDream)
     for s in hashtags :
-        ticker = '$' + s[0]
+        ticker = '$' + s
         print(ticker)
         AnalysisDBInsert(ticker)
 
 ##AnalysisDBInsert('#CRBP') 
 #
-search_hashtags()
+#search_hashtags()
 #

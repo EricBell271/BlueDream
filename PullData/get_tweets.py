@@ -89,14 +89,14 @@ def get_tweets_hashtag(hashtag):
 
 def get_tweets_screenname(screen_name):
  
-    time.sleep(20)
+    time.sleep(10)
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_key, access_secret)
     api = tweepy.API(auth)
  
     all_the_tweets = []
 
-    new_tweets = api.user_timeline(screen_name=screen_name, count=10)
+    new_tweets = api.user_timeline(screen_name=screen_name, count=100)
  
     all_the_tweets.extend(new_tweets)
  

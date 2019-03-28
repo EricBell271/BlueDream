@@ -19,6 +19,8 @@ from db_loadfiles.connect_DB import BlueDream
 #PullData is where we are getting the data; If It has insert in the name, it a SQL Transaction
 from PullData.GetDataHistoric import HistoricalPricingInsert
 from PullData.GetDataToday import TodayPricingInsert
+from PullData.GetTwitterData import InsertHashtagData
+from PullData.GetStockTickerMJ import LegalizeIt
 
 ###This universe can be modified. I also have functions that can be added to add more stocks. 
 from UniverseData.universe import Faber_Ticker, SPY_Only_Universe
@@ -33,14 +35,14 @@ from Analytics.LocalMaxMin import get_max_min, find_patterns,plot_minmax_pattern
 
 #Universe = 
 Universe = Faber_Ticker #Universe can be modified in the UniverseData.universe file. 
-
+#LegalizeIt()
 
 #Build DataBase
 HistoricalPricingInsert(Universe , '1h') #This can be 1D to get daily date. 
 #You do not have to run this everyday. This builds the historical data base for a year. This can be configured in 
 #PullData.HistoricDataPullDates with the GetYearWindow function.
 TodayPricingInsert(Universe) #This will insert the data in for the day.
-
+InsertHashtagData(Universe) 
 
 
 from DBQuery.BlueDream import GetPrice
