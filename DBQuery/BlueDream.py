@@ -20,7 +20,7 @@ def GetPrice(Database, ticker):
     PricingData= cursor.fetchall()
     return(PricingData)
 
-GetPrice(BlueDream, 'AGG')
+GetPrice(BlueDream, 'SPY')
 
 def GetPriceSpecifyDate(Database, ticker, date):
     ticker ='AGG'
@@ -78,3 +78,16 @@ GetPriceSpecifyDate(BlueDream, 'AGG', '2019-01-23')
 ##    
 #    
 #GetSupRes(BlueDream)
+
+
+def GetPriceAll(Database):
+    DB = Database
+    cursor = DB.cursor()
+    cursor.execute("""select *
+                   --a.DateTime,a.Open,a.High,  a.Low, a.close,  a.volume
+                    from tickerdateprice a""")
+    
+    PricingData= cursor.fetchall()
+    return(PricingData)
+
+All= GetPriceAll(BlueDream)

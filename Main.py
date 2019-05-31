@@ -38,11 +38,11 @@ Universe = Faber_Ticker #Universe can be modified in the UniverseData.universe f
 #LegalizeIt()
 
 #Build DataBase
-HistoricalPricingInsert(Universe , '1h') #This can be 1D to get daily date. 
+#HistoricalPricingInsert(Universe , '1h') #This can be 1D to get daily date. 
 #You do not have to run this everyday. This builds the historical data base for a year. This can be configured in 
 #PullData.HistoricDataPullDates with the GetYearWindow function.
-TodayPricingInsert(Universe) #This will insert the data in for the day.
-InsertHashtagData(Universe) 
+#TodayPricingInsert(Universe) #This will insert the data in for the day.
+#InsertHashtagData(Universe) 
 
 
 from DBQuery.BlueDream import GetPrice
@@ -51,32 +51,51 @@ from DBQuery.BlueDream import GetPrice
 import pandas as pd
 
 import matplotlib.pyplot as plt
+from math import isnan
+from decimal import Decimal
+def is_num(value):
+    try:
+        value =Decimal(value)
+        return True
+    except:
+        return False
 
-def GetLocalCriteria(Universe, charts = True) :
+        
 
-    smoothing = 10*8
-    window =30*8
+def GetLocalCriteria(Universe, smooth_Length, window_Length, charts = True) :
+#    Signal_Status = []
+    SignalReturn= []
+    smoothing = smooth_Length
+    window = window_Length
     for stock in Universe :
+        print(stock)
         historicData = GetPrice(BlueDream, stock)
         #    print(historicData)
         df =pd.DataFrame(historicData, columns =['ticker', 'Date', 'Open','High',  'Low', 'close',  'volume', 'DateTime'])
         df.set_index(['ticker', 'DateTime' ])
         df.drop('Date', axis=1, inplace=True)
-    
+        df['ema']=df.close.ewm(span=20,adjust=False).mean() #
         max_min =get_max_min(df, smoothing, window)#this function calculates the min and max of the stocks. 
+        #this function calculates the min and max of the stocks. 
+        Signal_data= pd.concat([df , max_min], axis =1)
+        
+        Signal_data.columns
+        #this function calculates the min and max of the stocks. 
+        Signal_data= pd.concat([df , max_min], axis =1)
+        Signal_data= pd.concat([df , max_min.rename('CriticalPoint')], axis =1)
+        #    print(todays_data)
+        Signal_data.columns
+        Signal_data['Signal'] = 0
+        Signal_data.loc[Signal_data['ema'] >=  Signal_data['CriticalPoint'], 'Signal'] = 1
+        Signal_data.loc[Signal_data['ema'] <=  Signal_data['CriticalPoint'], 'Signal'] = -1
+        SignalReturn.append(Signal_data)
         if charts == True: 
-            ema=df.close.ewm(span=20,adjust=False).mean() #
+
             df.reset_index()['close'].plot()##Run these two functions together
-            ema.plot()
+            df.ema.plot()
             
             plt.scatter(max_min.index, max_min.values, color = 'orange', alpha = 0.50)##to complete the plot
-
-    #        df.ema =df.close.ewm(com=0.5).mean()
-    #    df.head()
-            ##Calculate the ema
-            patterns  =find_patterns(max_min) ###Find stock patterns. 
-            #plot_minmax_patterns(df, max_min, patterns, stock, window, ema)
             plt.show()
-    return(max_min)
+    return(SignalReturn)
     
-GetLocalCriteria(Universe, charts = True)
+data  = GetLocalCriteria(Universe, smooth_Length= 20, window_Length =25 , charts = False)
